@@ -40,8 +40,22 @@ async function getAccount(req, res) {
   }
 }
 
+async function getAccountLedger(req, res) {
+  try {
+    const { accountId } = req.params;
+
+    const entries = await accountService.getAccountLedger(accountId);
+    res.json(entries);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch ledger entries" });
+  }
+}
+
+
 
 module.exports = {
   createAccount,
-  getAccount
+  getAccount,
+  getAccountLedger
 };

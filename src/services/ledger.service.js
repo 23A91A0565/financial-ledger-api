@@ -19,6 +19,25 @@ async function calculateBalance(accountId) {
   return rows[0].balance;
 }
 
+async function getLedgerEntries(accountId) {
+  const query = `
+    SELECT 
+      id,
+      transaction_id,
+      entry_type,
+      amount,
+      created_at
+    FROM ledger_entries
+    WHERE account_id = ?
+    ORDER BY created_at ASC
+  `;
+
+  const [rows] = await pool.execute(query, [accountId]);
+  return rows;
+}
+
+
 module.exports = {
-  calculateBalance
+  calculateBalance,
+  getLedgerEntries
 };

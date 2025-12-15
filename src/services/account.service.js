@@ -44,8 +44,13 @@ async function getAccountById(accountId) {
   };
 }
 
+async function getAccountLedger(accountId) {
+  return await ledgerService.getLedgerEntries(accountId);
+}
+
 
 module.exports = {
   createAccount,
-  getAccountById
+  getAccountById,
+  getAccountLedger
 };
