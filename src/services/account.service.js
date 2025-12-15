@@ -1,3 +1,4 @@
+const ledgerService = require("./ledger.service");
 const { v4: uuidv4 } = require("uuid");
 const pool = require("../config/db");
 
@@ -20,6 +21,31 @@ async function createAccount({ userId, accountType, currency }) {
   };
 }
 
+async function getAccountById(accountId) {
+  const [rows] = await pool.execute(
+    "SELECT * FROM accounts WHERE id = ?",
+    [accountId]
+  );
+
+  if (rows.length === 0) {
+    return null;
+  }
+
+  const account = rows[0];
+  const balance = await ledgerService.calculateBalance(accountId);
+
+  return {
+    id: account.id,
+    userId: account.user_id,
+    accountType: account.account_type,
+    currency: account.currency,
+    status: account.status,
+    balance
+  };
+}
+
+
 module.exports = {
-  createAccount
+  createAccount,
+  getAccountById
 };

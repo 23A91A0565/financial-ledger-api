@@ -23,6 +23,25 @@ async function createAccount(req, res) {
   }
 }
 
+async function getAccount(req, res) {
+  try {
+    const { accountId } = req.params;
+
+    const account = await accountService.getAccountById(accountId);
+
+    if (!account) {
+      return res.status(404).json({ error: "Account not found" });
+    }
+
+    res.json(account);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch account" });
+  }
+}
+
+
 module.exports = {
-  createAccount
+  createAccount,
+  getAccount
 };
